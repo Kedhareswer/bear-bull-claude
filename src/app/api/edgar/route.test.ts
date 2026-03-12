@@ -97,9 +97,12 @@ describe('GET /api/edgar', () => {
     mockFetch.mockResolvedValueOnce(mockResponse(SEARCH_RESPONSE))
     // Call 2: submissions
     mockFetch.mockResolvedValueOnce(mockResponse(SUBMISSIONS_RESPONSE))
-    // Call 3: filing index
+    // Parallel batch: 10-K index, 10-Q index (empty dir), XBRL (fail), 13F (fail)
     mockFetch.mockResolvedValueOnce(mockResponse(INDEX_RESPONSE))
-    // Call 4: filing document HTML
+    mockFetch.mockResolvedValueOnce(mockResponse({ directory: { item: [] } }))
+    mockFetch.mockRejectedValueOnce(new Error('no xbrl'))
+    mockFetch.mockRejectedValueOnce(new Error('no 13f'))
+    // 10-K HTML document
     mockFetch.mockResolvedValueOnce(
       mockHtmlResponse('<html><body><p>Annual report content.</p></body></html>')
     )
@@ -131,9 +134,19 @@ describe('GET /api/edgar', () => {
   })
 
   it('strips HTML tags from filing text', async () => {
+    // Sequential: search, submissions
     mockFetch.mockResolvedValueOnce(mockResponse(SEARCH_RESPONSE))
     mockFetch.mockResolvedValueOnce(mockResponse(SUBMISSIONS_RESPONSE))
+    // Parallel batch (order follows Promise.all array order):
+    // 1) 10-K fetchFilingHtml → index JSON
     mockFetch.mockResolvedValueOnce(mockResponse(INDEX_RESPONSE))
+    // 2) 10-Q fetchFilingHtml → index JSON (empty directory so no HTML fetch follows)
+    mockFetch.mockResolvedValueOnce(mockResponse({ directory: { item: [] } }))
+    // 3) fetchXbrlFacts → return empty (caught)
+    mockFetch.mockRejectedValueOnce(new Error('no xbrl'))
+    // 4) fetchInstitutionalHolders → return empty (caught)
+    mockFetch.mockRejectedValueOnce(new Error('no 13f'))
+    // 5) 10-K fetchFilingHtml → HTML document (triggered after index resolves)
     mockFetch.mockResolvedValueOnce(
       mockHtmlResponse('<html><body><h1>Title</h1><p>Plain text content here.</p><script>evil()</script></body></html>')
     )
@@ -151,7 +164,12 @@ describe('GET /api/edgar', () => {
     const longHtml = '<p>' + 'x'.repeat(100000) + '</p>'
     mockFetch.mockResolvedValueOnce(mockResponse(SEARCH_RESPONSE))
     mockFetch.mockResolvedValueOnce(mockResponse(SUBMISSIONS_RESPONSE))
+    // Parallel: 10-K index, 10-Q index (empty), XBRL (fail), 13F (fail)
     mockFetch.mockResolvedValueOnce(mockResponse(INDEX_RESPONSE))
+    mockFetch.mockResolvedValueOnce(mockResponse({ directory: { item: [] } }))
+    mockFetch.mockRejectedValueOnce(new Error('no xbrl'))
+    mockFetch.mockRejectedValueOnce(new Error('no 13f'))
+    // 10-K HTML document
     mockFetch.mockResolvedValueOnce(mockHtmlResponse(longHtml))
 
     const req = makeReq({ ticker: 'AAPL' })

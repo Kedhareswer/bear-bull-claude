@@ -15,6 +15,9 @@ vi.mock('@/lib/key-store', () => ({
   getKey: (...args: unknown[]) => mockGetKey(...args),
   saveKey: vi.fn(),
   hasKey: vi.fn(() => false),
+  getDataKey: vi.fn(() => null),
+  saveDataKey: vi.fn(),
+  hasDataKey: vi.fn(() => false),
 }))
 
 // Mock research store

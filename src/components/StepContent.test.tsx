@@ -5,9 +5,13 @@ import { StepContent } from './StepContent'
 import type { StepResult } from '@/store/research'
 import type { ResearchStep } from '@/lib/research-steps'
 
-// Mock renderMarkdown to avoid dealing with HTML transforms in tests
+// Mock parse-step to avoid dealing with HTML transforms and parsing in tests
 vi.mock('@/lib/parse-step', () => ({
   renderMarkdown: (text: string) => text,
+  extractMetrics: () => [],
+  extractDataPoints: () => [],
+  extractTrend: () => [],
+  extractValuation: () => null,
 }))
 
 const stepDef: ResearchStep = {
@@ -80,19 +84,22 @@ describe('StepContent', () => {
   })
 
   it('shows sources when done and citations array is non-empty', () => {
+    // Use citations that are not part of the fed data sources for step 3
+    // (fed sources are: XBRL Facts, 10-K §7, 10-K §7A, 10-K §8)
+    // so [10-K §1] and [Synthesis] will appear as AI citations
     render(
       <StepContent
         step={makeStep({
           status: 'done',
           keyFinding: 'Some finding',
-          citations: ['[10-K §7.1]', '[10-K §8.2]'],
+          citations: ['[10-K §1]', '[Synthesis]'],
         })}
         stepDef={stepDef}
       />
     )
-    expect(screen.getByText('Sources')).toBeInTheDocument()
-    expect(screen.getByText('[10-K §7.1]')).toBeInTheDocument()
-    expect(screen.getByText('[10-K §8.2]')).toBeInTheDocument()
+    expect(screen.getByText('AI citations')).toBeInTheDocument()
+    expect(screen.getByText('[10-K §1]')).toBeInTheDocument()
+    expect(screen.getByText('[Synthesis]')).toBeInTheDocument()
   })
 
   it('does not show sources section when citations array is empty', () => {

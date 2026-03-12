@@ -63,7 +63,26 @@
       "Bash(git mv:*)",
       "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull add next-env.d.ts .env.example)",
       "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull status --short)",
-      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull commit -m \"chore: move Next.js config files to repo root\")"
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull commit -m \"chore: move Next.js config files to repo root\")",
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull status)",
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull ls-files package-lock.json)",
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull diff package-lock.json)",
+      "Bash(node -e \"const v = require\\(''./node_modules/vitest/package.json''\\); console.log\\(''vitest:'', v.version\\)\")",
+      "Bash(node -e \"const v = require\\(''./node_modules/@vitejs/plugin-react/package.json''\\); console.log\\(''@vitejs/plugin-react:'', v.version\\)\")",
+      "Bash(node -e \"const v = require\\(''./node_modules/vite/package.json''\\); console.log\\(''vite:'', v.version\\)\")",
+      "Bash(node -e \"const v = require\\(''./node_modules/@vitejs/plugin-react/package.json''\\); console.log\\(JSON.stringify\\(v.peerDependencies, null, 2\\)\\)\")",
+      "Bash(node_modules/.bin/vitest run:*)",
+      "Bash(npm info:*)",
+      "Bash(node -e \"const d=require\\(''''fs''''\\).readFileSync\\(''''/dev/stdin'''',''''utf8''''\\); const v=JSON.parse\\(d\\); console.log\\(v.slice\\(-10\\).join\\(''''\\\\n''''\\)\\)\")",
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull log --oneline -5)",
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull show 2bf4f78:app/vitest.config.ts)",
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull show 2bf4f78:app/package.json)",
+      "Bash(node -e \"const lock = require\\(''./package-lock.json''\\); console.log\\(''vitest:'', lock.packages[''node_modules/vitest'']?.version\\); console.log\\(''vite:'', lock.packages[''node_modules/vite'']?.version\\); console.log\\(''plugin-react:'', lock.packages[''node_modules/@vitejs/plugin-react'']?.version\\);\")",
+      "Bash(node -e \"const v = require\\(''./node_modules/@vitest/runner/package.json''\\); console.log\\(''@vitest/runner:'', v.version\\);\")",
+      "Bash(grep -n clearCollectorContext /c/Users/mbkhn/Downloads/Inspired/claude-bull/node_modules/vitest/dist/chunks/*.js)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(./node_modules/.bin/vitest run:*)",
+      "Bash(echo \"EXIT: $?\")"
     ]
   }
 }

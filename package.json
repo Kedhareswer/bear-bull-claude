@@ -35,13 +35,13 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^5.1.4",
+    "@vitejs/plugin-react": "^5.2.0",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "jsdom": "^28.1.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.0"
+    "vitest": "^3.2.4"
   }
 }
