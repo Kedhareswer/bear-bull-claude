@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Bull - App Type Selection</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; background: #0a0a1a; color: #e0e0e0; margin: 0; padding: 40px 20px; }
+  h2 { text-align: center; font-size: 24px; margin-bottom: 4px; }
+  .subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 32px; }
+  .options { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+  .option-btn { background: #111122; border: 2px solid #333; border-radius: 12px; padding: 24px; cursor: pointer; text-align: left; color: #e0e0e0; font: inherit; width: 100%; transition: border-color 0.2s; }
+  .option-btn:hover, .option-btn:focus { border-color: #4fc3f7; outline: none; }
+  .option-btn.selected { border-color: #4fc3f7; background: #151530; }
+  .option-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .letter { width: 36px; height: 36px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: #4fc3f7; flex-shrink: 0; }
+  .option-title { font-size: 18px; font-weight: 600; }
+  .option-desc { font-size: 13px; color: #aaa; line-height: 1.6; margin-bottom: 16px; }
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pros, .cons { background: #0d0d1a; border-radius: 8px; padding: 12px; }
+  .pros h4 { color: #4caf50; margin: 0 0 8px 0; font-size: 13px; }
+  .cons h4 { color: #f44336; margin: 0 0 8px 0; font-size: 13px; }
+  .pros ul, .cons ul { margin: 0; padding-left: 16px; font-size: 12px; color: #aaa; line-height: 1.7; }
+  .rec { background: #1a2a1a; color: #4caf50; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+</style>
+</head>
+<body>
+<main>
+  <h2>What Kind of App Should Claude Bull Be?</h2>
+  <p class="subtitle">Considering: BYOK model, hosted project, users don't trust with sensitive keys</p>
+
+  <section class="options" aria-label="Application type options">
+    <button type="button" class="option-btn" data-choice="a" onclick="this.classList.toggle('selected')">
+      <div class="option-header">
+        <span class="letter" aria-hidden="true">A</span>
+        <span class="option-title">Full-Stack Web App <span class="rec">Recommended</span></span>
+      </div>
+      <p class="option-desc">Next.js app hosted on Vercel/Railway. Users sign in with GitHub/Google, store their Claude API key in their browser (localStorage/encrypted). Server handles SEC EDGAR fetching, but API calls to Claude happen client-side so keys never touch your server.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul>
+          <li>Best UX — guided wizard, real-time progress, rich dashboard</li>
+          <li>Keys stay client-side (zero trust issue)</li>
+          <li>SEC data fetching is public, no keys needed</li>
+          <li>Easy to share as portfolio project</li>
+        </ul></div>
+        <div class="cons"><h4>Cons</h4><ul>
+          <li>More complex to build</li>
+          <li>Need hosting (Vercel free tier works)</li>
+          <li>Client-side Claude calls have CORS considerations</li>
+        </ul></div>
+      </div>
+    </button>
+
+    <button type="button" class="option-btn" data-choice="b" onclick="this.classList.toggle('selected')">
+      <div class="option-header">
+        <span class="letter" aria-hidden="true">B</span>
+        <span class="option-title">Static SPA + Edge Functions</span>
+      </div>
+      <p class="option-desc">React SPA with Supabase backend. Edge functions proxy Claude API calls (user provides key per-session, stored only in memory). Supabase handles auth and stores research data. Keys are ephemeral — never persisted.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul>
+          <li>Supabase free tier is generous</li>
+          <li>Edge functions can proxy without persisting keys</li>
+          <li>Real-time capabilities built in</li>
+          <li>Good auth story (Supabase Auth)</li>
+        </ul></div>
+        <div class="cons"><h4>Cons</h4><ul>
+          <li>Edge function cold starts</li>
+          <li>More infrastructure to manage</li>
+          <li>Key passes through your function (even if ephemeral)</li>
+        </ul></div>
+      </div>
+    </button>
+
+    <button type="button" class="option-btn" data-choice="c" onclick="this.classList.toggle('selected')">
+      <div class="option-header">
+        <span class="letter" aria-hidden="true">C</span>
+        <span class="option-title">Client-Only PWA</span>
+      </div>
+      <p class="option-desc">Progressive Web App that runs entirely in the browser. All Claude API calls are direct from browser. Research data stored in IndexedDB. No server at all — just static files on GitHub Pages or Vercel.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul>
+          <li>Maximum trust — zero server, keys never leave browser</li>
+          <li>Free hosting (GitHub Pages)</li>
+          <li>Works offline for reviewing saved research</li>
+          <li>Simplest deployment</li>
+        </ul></div>
+        <div class="cons"><h4>Cons</h4><ul>
+          <li>Claude API has CORS restrictions (needs proxy or direct API support)</li>
+          <li>No collaboration features</li>
+          <li>IndexedDB has storage limits</li>
+          <li>SEC EDGAR CORS may need a lightweight proxy</li>
+        </ul></div>
+      </div>
+    </button>
+  </section>
+</main>
+</body>
+</html>

@@ -26,11 +26,12 @@ export interface MemoSummary {
 
 interface ResearchState {
   // Setup
-  ticker:   string
-  company:  string
-  provider: ProviderId
-  model:    string
-  depth:    'quick' | 'full'
+  ticker:     string
+  company:    string
+  provider:   ProviderId
+  model:      string
+  depth:      'quick' | 'full'
+  filingUrl:  string
 
   // Progress
   currentStep: number
@@ -44,7 +45,7 @@ interface ResearchState {
   notes: string
 
   // Actions
-  setSetup:      (ticker: string, company: string, provider: ProviderId, model: string, depth: 'quick' | 'full') => void
+  setSetup:      (ticker: string, company: string, provider: ProviderId, model: string, depth: 'quick' | 'full', filingUrl?: string) => void
   setCurrentStep:(stepId: number) => void
   startStep:     (stepId: number) => void
   appendContent: (stepId: number, chunk: string) => void
@@ -65,11 +66,11 @@ export const useResearchStore = create<ResearchState>()(
   persist(
     (set) => ({
       ticker: '', company: '', provider: 'anthropic', model: 'claude-sonnet-4-6',
-      depth: 'full', currentStep: 1, steps: makeSteps(), isRunning: false,
+      depth: 'full', filingUrl: '', currentStep: 1, steps: makeSteps(), isRunning: false,
       memo: null, notes: '',
 
-      setSetup: (ticker, company, provider, model, depth) =>
-        set({ ticker, company, provider, model, depth, steps: makeSteps(), currentStep: 1, memo: null }),
+      setSetup: (ticker, company, provider, model, depth, filingUrl = '') =>
+        set({ ticker, company, provider, model, depth, filingUrl, steps: makeSteps(), currentStep: 1, memo: null }),
 
       setCurrentStep: (stepId) => set({ currentStep: stepId }),
 
@@ -103,12 +104,12 @@ export const useResearchStore = create<ResearchState>()(
 
       setMemo: (memo) => set({ memo }),
       setNotes: (notes) => set({ notes }),
-      reset: () => set({ ticker: '', company: '', steps: makeSteps(), currentStep: 1, isRunning: false, memo: null, notes: '' }),
+      reset: () => set({ ticker: '', company: '', filingUrl: '', steps: makeSteps(), currentStep: 1, isRunning: false, memo: null, notes: '' }),
     }),
     {
       name: 'claude-bull-research',
       partialize: (state) => ({
-        ticker: state.ticker, company: state.company,
+        ticker: state.ticker, company: state.company, filingUrl: state.filingUrl,
         provider: state.provider, model: state.model,
         depth: state.depth, steps: state.steps,
         currentStep: state.currentStep, memo: state.memo, notes: state.notes,

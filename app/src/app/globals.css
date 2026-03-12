@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "../tokens.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -49,57 +50,61 @@
 
 @layer base {
   :root {
-    /* Claude Bull design tokens */
-    --bg:  #0c0c0e;
-    --s1:  #141416;
-    --s2:  #1c1c1f;
-    --s3:  #242428;
-    --b1:  #2a2a2e;
-    --b2:  #3a3a40;
-    --t1:  #ebebeb;
-    --t2:  #888888;
-    --t3:  #4c4c52;
-    --up:  hsl(142, 38%, 46%);
-    --dn:  hsl(2, 48%, 48%);
-    --r:   6px;
+    /*
+     * Legacy shorthand aliases — source from tokens.css primitives.
+     * Existing components reference these; migrate incrementally
+     * to semantic tokens (var(--surface-base), var(--text-primary), etc.).
+     */
+    --bg:  var(--gray-950);
+    --s1:  var(--gray-900);
+    --s2:  var(--gray-850);
+    --s3:  var(--gray-800);
+    --b1:  var(--gray-750);
+    --b2:  var(--gray-700);
+    --t1:  var(--gray-100);
+    --t2:  var(--gray-400);
+    --t3:  var(--gray-600);
+    --up:  var(--green-500);
+    --dn:  var(--red-500);
+    --r:   var(--radius-base);
 
-    /* shadcn/ui variables mapped to our palette */
-    --background: #0c0c0e;
-    --foreground: #ebebeb;
-    --card: #141416;
-    --card-foreground: #ebebeb;
-    --popover: #141416;
-    --popover-foreground: #ebebeb;
-    --primary: #ebebeb;
-    --primary-foreground: #0c0c0e;
-    --secondary: #1c1c1f;
-    --secondary-foreground: #ebebeb;
-    --muted: #1c1c1f;
-    --muted-foreground: #888888;
-    --accent: #242428;
-    --accent-foreground: #ebebeb;
-    --destructive: hsl(2, 48%, 48%);
-    --border: #2a2a2e;
-    --input: #1c1c1f;
-    --ring: #3a3a40;
-    --radius: 0.375rem;
+    /* shadcn/ui variables sourced from tokens */
+    --background:           var(--gray-950);
+    --foreground:           var(--gray-100);
+    --card:                 var(--gray-900);
+    --card-foreground:      var(--gray-100);
+    --popover:              var(--gray-900);
+    --popover-foreground:   var(--gray-100);
+    --primary:              var(--gray-100);
+    --primary-foreground:   var(--gray-950);
+    --secondary:            var(--gray-850);
+    --secondary-foreground: var(--gray-100);
+    --muted:                var(--gray-850);
+    --muted-foreground:     var(--gray-400);
+    --accent:               var(--gray-800);
+    --accent-foreground:    var(--gray-100);
+    --destructive:          var(--red-500);
+    --border:               var(--gray-750);
+    --input:                var(--gray-850);
+    --ring:                 var(--gray-700);
+    --radius:               0.375rem;
 
-    /* Chart tokens (retained from original) */
-    --chart-1: oklch(0.809 0.105 251.813);
-    --chart-2: oklch(0.623 0.214 259.815);
-    --chart-3: oklch(0.546 0.245 262.881);
-    --chart-4: oklch(0.488 0.243 264.376);
-    --chart-5: oklch(0.424 0.199 265.638);
+    /* Chart tokens */
+    --chart-1: var(--chart-blue-1);
+    --chart-2: var(--chart-blue-2);
+    --chart-3: var(--chart-blue-3);
+    --chart-4: var(--chart-blue-4);
+    --chart-5: var(--chart-blue-5);
 
     /* Sidebar tokens */
-    --sidebar: #141416;
-    --sidebar-foreground: #ebebeb;
-    --sidebar-primary: #ebebeb;
-    --sidebar-primary-foreground: #0c0c0e;
-    --sidebar-accent: #242428;
-    --sidebar-accent-foreground: #ebebeb;
-    --sidebar-border: #2a2a2e;
-    --sidebar-ring: #3a3a40;
+    --sidebar:                   var(--gray-900);
+    --sidebar-foreground:        var(--gray-100);
+    --sidebar-primary:           var(--gray-100);
+    --sidebar-primary-foreground: var(--gray-950);
+    --sidebar-accent:            var(--gray-800);
+    --sidebar-accent-foreground: var(--gray-100);
+    --sidebar-border:            var(--gray-750);
+    --sidebar-ring:              var(--gray-700);
   }
 
   * {
@@ -112,7 +117,12 @@
 }
 
 html, body {
-  background: var(--bg);
-  color: var(--t1);
+  background: var(--surface-base);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }

@@ -36,3 +36,23 @@ export function getAllSavedProviders(): ProviderId[] {
   const all: ProviderId[] = ['anthropic', 'openai', 'google', 'groq', 'openrouter']
   return all.filter(p => hasKey(p))
 }
+
+// Generic data key store (for non-AI-provider keys like Alpha Vantage)
+const DATA_PREFIX = 'cb_data_'
+
+export function saveDataKey(name: string, key: string): void {
+  if (typeof localStorage === 'undefined') return
+  localStorage.setItem(DATA_PREFIX + name, obfuscate(key))
+}
+
+export function getDataKey(name: string): string | null {
+  if (typeof localStorage === 'undefined') return null
+  const raw = localStorage.getItem(DATA_PREFIX + name)
+  if (!raw) return null
+  const val = deobfuscate(raw)
+  return val || null
+}
+
+export function hasDataKey(name: string): boolean {
+  return getDataKey(name) !== null
+}

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en" data-screen="onboarding">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Bull — Equity Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:  #0c0c0e;
+  --s1:  #141416;
+  --s2:  #1c1c1f;
+  --s3:  #242428;
+  --b1:  #2a2a2e;
+  --b2:  #3a3a40;
+  --t1:  #ebebeb;
+  --t2:  #888;
+  --t3:  #4c4c52;
+  --up:  hsl(142, 38%, 46%);
+  --dn:  hsl(2,   48%, 48%);
+  --l1:  #c0c0c0;
+  --l2:  #484850;
+  --r: 6px;
+  --f:  'Inter', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+}
+
+html, body {
+  height: 100%; background: var(--bg); color: var(--t1);
+  font-family: var(--f); font-size: 14px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.screen { display: none; height: 100vh; flex-direction: column; overflow: hidden; }
+[data-screen="onboarding"] .screen-onboarding,
+[data-screen="wizard"]     .screen-wizard,
+[data-screen="memo"]       .screen-memo { display: flex; }
+
+/* Proto nav */
+.proto-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; gap: 1px; background: var(--b1);
+  border-top: 1px solid var(--b1); z-index: 100;
+}
+.proto-nav button {
+  flex: 1; padding: 10px; background: var(--s1); color: var(--t3);
+  font: 12px var(--f); border: none; cursor: pointer; transition: color .15s;
+}
+.proto-nav button:hover, .proto-nav button.active { color: var(--t1); }
+
+/* ════════════════════════════════════
+   SCREEN 1 · ONBOARDING
+   Consumer job: "Get started with the company I want to research."
+════════════════════════════════════ */
+.screen-onboarding { align-items: center; justify-content: center; }
+
+.ob-wrap {
+  width: 100%; max-width: 420px; padding: 0 24px;
+  display: flex; flex-direction: column; gap: 32px; text-align: center;
+}
+
+.ob-headline h1 {
+  font-size: 26px; font-weight: 600; letter-spacing: -.4px; line-height: 1.3; margin-bottom: 9px;
+}
+.ob-headline p { font-size: 14px; color: var(--t2); line-height: 1.65; }
+
+.ob-card {
+  background: var(--s1); border: 1px solid var(--b1);
+  border-radius: 10px; overflow: hidden; text-align: left;
+}
+
+.ob-tabs { display: flex; border-bottom: 1px solid var(--b1); }
+.ob-tab {
+  flex: 1; padding: 11px 0; text-align: center; font-size: 12px; color: var(--t3);
+  border-bottom: 1px solid transparent; margin-bottom: -1px; cursor: pointer; transition: all .15s;
+}
+.ob-tab.active { color: var(--t1); border-color: var(--t1); }
+.tab-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%; background: var(--s3);
+  font-size: 10px; margin-right: 5px;
+}
+.ob-tab.active .tab-num { background: var(--t1); color: var(--bg); }
+
+.ob-step { padding: 20px; display: flex; flex-direction: column; gap: 0; }
+.ob-step.hidden { display: none; }
+
+.f-label {
+  font-size: 10px; font-weight: 500; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--t3); margin-bottom: 6px;
+}
+.f-input {
+  width: 100%; background: var(--s2); border: 1px solid var(--b1);
+  border-radius: var(--r); padding: 10px 12px; color: var(--t1);
+  font: 13px/1 var(--fm); outline: none; transition: border-color .15s;
+}
+.f-input:focus { border-color: var(--b2); }
+.f-hint { font-size: 12px; color: var(--t3); margin-top: 6px; margin-bottom: 20px; }
+.f-hint a { color: var(--t2); text-decoration: none; border-bottom: 1px solid var(--b1); }
+
+/* Depth toggle */
+.depth-wrap { margin: 16px 0 20px; }
+.depth-opts { display: flex; gap: 8px; margin-top: 8px; }
+.depth-opt {
+  flex: 1; padding: 10px 12px; background: var(--s2); border: 1px solid var(--b1);
+  border-radius: var(--r); cursor: pointer; transition: all .15s; display: flex;
+  flex-direction: column; gap: 2px;
+}
+.depth-opt.sel { border-color: var(--b2); background: var(--s3); }
+.depth-opt input { display: none; }
+.depth-name { font-size: 13px; font-weight: 500; color: var(--t1); }
+.depth-desc { font-size: 11px; color: var(--t3); }
+
+.ob-cta {
+  width: 100%; padding: 10px; background: var(--t1); color: var(--bg);
+  font: 500 13px var(--f); border: none; border-radius: var(--r); cursor: pointer; transition: opacity .15s;
+}
+.ob-cta:hover { opacity: .86; }
+
+.ob-trust { font-size: 11px; color: var(--t3); line-height: 1.8; }
+
+/* ════════════════════════════════════
+   SCREEN 2 · RESEARCH WIZARD
+   Consumer job: "See what Claude is finding, step by step."
+════════════════════════════════════ */
+.screen-wizard { flex-direction: row; overflow: hidden; }
+
+.wz-sidebar {
+  width: 188px; min-width: 188px; background: var(--s1);
+  border-right: 1px solid var(--b1); display: flex; flex-direction: column;
+  overflow-y: auto; padding: 18px 0 80px; flex-shrink: 0;
+}
+
+.wz-ticker { padding: 0 16px 14px; border-bottom: 1px solid var(--b1); margin-bottom: 6px; }
+.wz-sym { font: 600 16px var(--f); }
+.wz-sub { font-size: 11px; color: var(--t3); margin-top: 2px; }
+
+.wz-progress-outer {
+  padding: 10px 16px 6px; display: flex; align-items: center; gap: 8px;
+}
+.wz-progress-bar {
+  flex: 1; height: 2px; background: var(--b1); border-radius: 1px; overflow: hidden;
+}
+.wz-progress-fill { height: 100%; background: var(--t3); border-radius: 1px; width: 22%; }
+.wz-progress-label { font: 10px var(--fm); color: var(--t3); flex-shrink: 0; }
+
+.wz-step {
+  display: flex; align-items: center; gap: 9px; padding: 7px 16px;
+  cursor: pointer; transition: background .1s;
+}
+.wz-step:hover { background: var(--s2); }
+.wz-step.active { background: var(--s2); }
+.wz-step-num {
+  width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font: 9px var(--fm); border: 1px solid var(--b1); color: var(--t3);
+}
+.wz-step.done  .wz-step-num { color: var(--t3); font-size: 10px; }
+.wz-step.active .wz-step-num { background: var(--t1); border-color: var(--t1); color: var(--bg); }
+.wz-step-name  { font-size: 12px; color: var(--t3); }
+.wz-step.active .wz-step-name { color: var(--t1); }
+
+.wz-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.wz-head {
+  padding: 14px 22px; border-bottom: 1px solid var(--b1);
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.wz-head-left h2 { font-size: 15px; font-weight: 600; }
+.wz-head-left p  { font-size: 11px; color: var(--t3); margin-top: 2px; }
+.wz-badges { display: flex; gap: 6px; align-items: center; }
+.badge {
+  font: 10px var(--fm); color: var(--t3); background: var(--s2);
+  border: 1px solid var(--b1); border-radius: 4px; padding: 3px 6px;
+}
+
+.wz-body {
+  flex: 1; overflow-y: auto; padding: 20px 22px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+/* Status bar — tells the user exactly what's being read */
+.wz-status {
+  display: flex; align-items: center; gap: 8px; padding: 9px 12px;
+  background: var(--s2); border: 1px solid var(--b1); border-radius: var(--r);
+  font-size: 12px; color: var(--t2);
+}
+.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--t2); flex-shrink: 0; }
+.wz-status em { color: var(--t1); font-style: normal; }
+
+/* Key Finding — most important thing on this screen */
+.wz-finding {
+  padding: 14px 16px; background: var(--s2); border: 1px solid var(--b2); border-radius: var(--r);
+}
+.wz-finding-label {
+  font: 500 9px var(--fm); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--t3); margin-bottom: 7px;
+}
+.wz-finding-text { font-size: 14px; font-weight: 500; color: var(--t1); line-height: 1.55; }
+
+/* Metrics */
+.wz-metrics {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--b1); border: 1px solid var(--b1);
+  border-radius: var(--r); overflow: hidden;
+}
+.metric { background: var(--s2); padding: 12px 14px; }
+.metric-label { font: 10px var(--f); letter-spacing: .06em; text-transform: uppercase; color: var(--t3); margin-bottom: 5px; }
+.metric-val   { font: 500 19px var(--fm); color: var(--t1); }
+.metric-chg   { font: 11px var(--fm); margin-top: 3px; }
+.up { color: var(--up); } .dn { color: var(--dn); } .nu { color: var(--t2); }
+
+/* Chart */
+.wz-chart {
+  background: var(--s2); border: 1px solid var(--b1);
+  border-radius: var(--r); padding: 14px 16px;
+}
+.chart-head {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+}
+.chart-title { font: 500 10px var(--f); letter-spacing: .06em; text-transform: uppercase; color: var(--t3); }
+.chart-legend { display: flex; gap: 12px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--t3); }
+.legend-line { width: 16px; height: 1.5px; }
+
+/* Analysis */
+.wz-analysis { font-size: 13px; color: var(--t2); line-height: 1.8; }
+.wz-analysis strong { color: var(--t1); font-weight: 500; }
+.cite {
+  font: 10px var(--fm); color: var(--t3); background: var(--s3);
+  border: 1px solid var(--b1); border-radius: 3px;
+  padding: 1px 5px; margin: 0 1px; white-space: nowrap; cursor: pointer;
+}
+.cite:hover { border-color: var(--b2); color: var(--t2); }
+
+/* Sources — "where did this come from?" */
+.wz-sources { display: flex; flex-direction: column; gap: 8px; }
+.sources-label { font: 10px var(--f); letter-spacing: .06em; text-transform: uppercase; color: var(--t3); }
+.sources-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.src-chip {
+  font: 11px var(--fm); color: var(--t2); background: var(--s2);
+  border: 1px solid var(--b1); border-radius: 4px; padding: 4px 9px; cursor: pointer;
+  transition: all .12s;
+}
+.src-chip:hover { border-color: var(--b2); color: var(--t1); }
+
+/* Follow-up */
+.wz-followup {
+  display: flex; align-items: center; gap: 0;
+  background: var(--s2); border: 1px solid var(--b1); border-radius: var(--r); overflow: hidden;
+}
+.followup-input {
+  flex: 1; background: transparent; border: none; padding: 10px 13px;
+  color: var(--t1); font: 13px var(--f); outline: none;
+}
+.followup-input::placeholder { color: var(--t3); }
+.followup-btn {
+  padding: 10px 14px; background: transparent; border: none; border-left: 1px solid var(--b1);
+  color: var(--t2); cursor: pointer; font-size: 14px; transition: color .15s;
+}
+.followup-btn:hover { color: var(--t1); }
+
+/* Footer */
+.wz-foot {
+  padding: 12px 22px; border-top: 1px solid var(--b1);
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.wz-foot-meta { font-size: 11px; color: var(--t3); }
+.wz-btns { display: flex; gap: 7px; }
+.btn {
+  padding: 7px 14px; border-radius: var(--r); font: 13px var(--f); cursor: pointer; transition: all .15s;
+}
+.btn-ghost   { background: transparent; border: 1px solid var(--b1); color: var(--t2); }
+.btn-ghost:hover { border-color: var(--b2); color: var(--t1); }
+.btn-primary { background: var(--t1); border: 1px solid var(--t1); color: var(--bg); font-weight: 500; }
+.btn-primary:hover { opacity: .86; }
+
+/* ════════════════════════════════════
+   SCREEN 3 · MEMO OUTPUT
+   Consumer job: "Make a decision. Get the verdict. See why."
+════════════════════════════════════ */
+.screen-memo { flex-direction: column; overflow: hidden; }
+
+.memo-top {
+  padding: 16px 28px; border-bottom: 1px solid var(--b1);
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.memo-co { display: flex; align-items: baseline; gap: 10px; }
+.memo-co h1 { font-size: 19px; font-weight: 600; }
+.memo-ticker {
+  font: 12px var(--fm); color: var(--t2); background: var(--s2);
+  border: 1px solid var(--b1); border-radius: 4px; padding: 3px 7px;
+}
+.memo-sub { font-size: 11px; color: var(--t3); }
+.memo-date { font-size: 11px; color: var(--t3); margin-top: 2px; }
+.memo-actions { display: flex; align-items: center; gap: 8px; }
+.btn-export {
+  background: transparent; border: 1px solid var(--b1); color: var(--t2);
+  font: 12px var(--f); padding: 6px 12px; border-radius: var(--r);
+  cursor: pointer; transition: all .15s;
+}
+.btn-export:hover { border-color: var(--b2); color: var(--t1); }
+
+.memo-body {
+  flex: 1; overflow-y: auto; padding: 24px 28px 80px;
+  max-width: 840px; width: 100%; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 0;
+}
+
+/* Verdict Hero — the first thing the consumer needs to see */
+.verdict-hero {
+  background: var(--s2); border: 1px solid var(--b2); border-radius: 8px;
+  padding: 20px; margin-bottom: 24px; display: flex; gap: 20px;
+}
+.vh-verdict-col { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-right: 20px; border-right: 1px solid var(--b1); min-width: 80px; justify-content: center; }
+.vh-verdict-badge { font: 600 15px var(--fm); color: var(--t1); }
+.vh-conviction { font: 11px var(--f); color: var(--t3); }
+.vh-stars { font-size: 13px; color: var(--t2); letter-spacing: 2px; }
+
+.vh-thesis { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.vh-thesis p { font-size: 13px; color: var(--t2); line-height: 1.7; }
+.vh-bullets { display: flex; flex-direction: column; gap: 4px; }
+.vh-bullet { font-size: 12px; color: var(--t3); display: flex; align-items: flex-start; gap: 7px; }
+.vh-bullet span:first-child { flex-shrink: 0; }
+.vh-bullet.pos span:first-child { color: var(--up); }
+.vh-bullet.neg span:first-child { color: var(--dn); }
+.vh-bullet.neg .vh-btext { color: var(--t2); }
+
+.vh-price-col {
+  flex-shrink: 0; display: flex; flex-direction: column; gap: 10px;
+  padding-left: 20px; border-left: 1px solid var(--b1); justify-content: center; min-width: 110px;
+}
+.vh-price-row { display: flex; flex-direction: column; gap: 1px; }
+.vh-price-label { font: 10px var(--f); letter-spacing: .06em; text-transform: uppercase; color: var(--t3); }
+.vh-price-val { font: 500 14px var(--fm); color: var(--t1); }
+.vh-price-val.dn { color: var(--dn); }
+
+/* Accordion sections */
+.memo-sections { display: flex; flex-direction: column; border-top: 1px solid var(--b1); }
+
+.memo-sec { border-bottom: 1px solid var(--b1); }
+.memo-sec-head {
+  display: flex; align-items: center; gap: 10px; padding: 14px 0;
+  cursor: pointer; user-select: none; transition: opacity .12s;
+}
+.memo-sec-head:hover { opacity: .8; }
+.sec-num   { font: 10px var(--fm); color: var(--t3); width: 22px; }
+.sec-title { font-size: 13px; font-weight: 600; color: var(--t1); flex: 1; }
+.sec-cites { font: 10px var(--fm); color: var(--t3); }
+.sec-toggle {
+  width: 18px; height: 18px; border: 1px solid var(--b1); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--t3); flex-shrink: 0; transition: all .15s;
+}
+.memo-sec.open .sec-toggle { background: var(--s3); }
+
+.memo-sec-body { padding: 0 0 16px 32px; display: none; }
+.memo-sec.open .memo-sec-body { display: block; }
+.memo-sec-body p { font-size: 13px; color: var(--t2); line-height: 1.8; }
+.memo-sec-body p strong { color: var(--t1); font-weight: 500; }
+
+/* Bear Case — always open, red highlight */
+.memo-sec.bear-sec .memo-sec-body { display: block; }
+.bear-block {
+  padding: 13px 15px;
+  background: hsla(0, 50%, 14%, .15); border: 1px solid hsla(0, 50%, 36%, .18);
+  border-radius: var(--r); font-size: 13px; color: var(--t2); line-height: 1.8;
+}
+.bear-block strong { color: var(--t1); font-weight: 500; }
+.sec-title.bear { color: var(--dn); }
+
+/* Your Notes — consumer records own thesis */
+.memo-notes { margin-top: 24px; }
+.notes-label {
+  font: 500 10px var(--f); letter-spacing: .07em; text-transform: uppercase;
+  color: var(--t3); margin-bottom: 8px;
+}
+.notes-area {
+  width: 100%; background: var(--s2); border: 1px solid var(--b1);
+  border-radius: var(--r); padding: 12px 14px; color: var(--t1);
+  font: 13px var(--f); line-height: 1.7; resize: vertical;
+  min-height: 90px; outline: none; transition: border-color .15s;
+}
+.notes-area::placeholder { color: var(--t3); }
+.notes-area:focus { border-color: var(--b2); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--b1); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     SCREEN 1 · ONBOARDING
+     Consumer job: Get started with the company I want to research.
+══════════════════════════════════ -->
+<div class="screen screen-onboarding">
+  <div class="ob-wrap">
+    <div class="ob-headline">
+      <h1>Equity research,<br>grounded in filings.</h1>
+      <p>Reads 10-K and 10-Q end to end.<br>Every insight cites the exact paragraph.</p>
+    </div>
+
+    <div class="ob-card">
+      <div class="ob-tabs">
+        <div class="ob-tab active" id="ob-tab-1">
+          <span class="tab-num" id="tab-num-1">✓</span> API Key
+        </div>
+        <div class="ob-tab" id="ob-tab-2">
+          <span class="tab-num" id="tab-num-2">2</span> Company
+        </div>
+      </div>
+
+      <!-- Step 1: API Key -->
+      <div class="ob-step" id="ob-step-1">
+        <div class="f-label">Anthropic API Key</div>
+        <input class="f-input" type="password" id="api-input" value="sk-ant-api03-••••••••••••••••">
+        <div class="f-hint">
+          Stored only in your browser. Never sent to any server.
+          <a href="#">Get a key →</a>
+        </div>
+        <button class="ob-cta" onclick="goStep2()">Next: Choose Company →</button>
+      </div>
+
+      <!-- Step 2: Company -->
+      <div class="ob-step hidden" id="ob-step-2">
+        <div class="f-label">Ticker or Company Name</div>
+        <input class="f-input" type="text" id="ticker-input" placeholder="AAPL, MSFT, NVDA, Tesla…">
+        <div class="f-hint">We'll pull the latest 10-K and 10-Q from SEC EDGAR automatically.</div>
+
+        <div class="depth-wrap">
+          <div class="f-label">Research Depth</div>
+          <div class="depth-opts">
+            <label class="depth-opt" id="depth-quick" onclick="selDepth('quick')">
+              <div class="depth-name">Quick</div>
+              <div class="depth-desc">3 core steps · ~$0.10</div>
+            </label>
+            <label class="depth-opt sel" id="depth-full" onclick="selDepth('full')">
+              <div class="depth-name">Full</div>
+              <div class="depth-desc">9 steps + bear case · ~$0.40</div>
+            </label>
+          </div>
+        </div>
+
+        <button class="ob-cta" onclick="showScreen('wizard')">Start Research →</button>
+      </div>
+    </div>
+
+    <div class="ob-trust">
+      Key never leaves your device &nbsp;·&nbsp; SEC EDGAR only &nbsp;·&nbsp; ~$0.40 per analysis
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN 2 · RESEARCH WIZARD
+     Consumer job: See what Claude is finding, step by step.
+══════════════════════════════════ -->
+<div class="screen screen-wizard">
+  <aside class="wz-sidebar">
+    <div class="wz-ticker">
+      <div class="wz-sym">AAPL</div>
+      <div class="wz-sub">Apple Inc. · FY2024</div>
+    </div>
+
+    <div class="wz-progress-outer">
+      <div class="wz-progress-bar"><div class="wz-progress-fill"></div></div>
+      <span class="wz-progress-label">2/9</span>
+    </div>
+
+    <div class="wz-step done">
+      <div class="wz-step-num">✓</div>
+      <span class="wz-step-name">Business Overview</span>
+    </div>
+    <div class="wz-step done">
+      <div class="wz-step-num">✓</div>
+      <span class="wz-step-name">Industry Scan</span>
+    </div>
+    <div class="wz-step active">
+      <div class="wz-step-num">3</div>
+      <span class="wz-step-name">Financial Deep Dive</span>
+    </div>
+    <div class="wz-step"><div class="wz-step-num">4</div><span class="wz-step-name">Moat Analysis</span></div>
+    <div class="wz-step"><div class="wz-step-num">5</div><span class="wz-step-name">Management Review</span></div>
+    <div class="wz-step"><div class="wz-step-num">6</div><span class="wz-step-name">Valuation</span></div>
+    <div class="wz-step"><div class="wz-step-num">7</div><span class="wz-step-name">Bear Case</span></div>
+    <div class="wz-step"><div class="wz-step-num">8</div><span class="wz-step-name">Earnings Update</span></div>
+    <div class="wz-step"><div class="wz-step-num">9</div><span class="wz-step-name">Decision Journal</span></div>
+  </aside>
+
+  <main class="wz-main">
+    <div class="wz-head">
+      <div class="wz-head-left">
+        <h2>Financial Deep Dive</h2>
+        <p>Revenue · Margins · Free Cash Flow · Balance Sheet</p>
+      </div>
+      <div class="wz-badges">
+        <span class="badge">10-K §8 + 10-Q</span>
+        <span class="badge">~$0.04</span>
+      </div>
+    </div>
+
+    <div class="wz-body">
+      <!-- What is Claude reading right now? -->
+      <div class="wz-status">
+        <div class="status-dot"></div>
+        Reading <em>10-K §8 — Results of Operations</em> · FY2024 Annual Report
+      </div>
+
+      <!-- Key Finding — most important, leads the screen -->
+      <div class="wz-finding">
+        <div class="wz-finding-label">Key Finding · Step 3</div>
+        <div class="wz-finding-text">
+          Revenue contracted 2% to $391B while Services grew 13% to $96B —
+          the product-to-services mix shift is the core investment thesis.
+        </div>
+      </div>
+
+      <!-- Metrics — the numbers behind the finding -->
+      <div class="wz-metrics">
+        <div class="metric">
+          <div class="metric-label">Revenue FY24</div>
+          <div class="metric-val">$391.0B</div>
+          <div class="metric-chg dn">▼ 2.0% vs FY23</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Operating Margin</div>
+          <div class="metric-val">31.5%</div>
+          <div class="metric-chg up">▲ +80bps YoY</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Free Cash Flow</div>
+          <div class="metric-val">$110.5B</div>
+          <div class="metric-chg nu">28.3% margin</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Services Rev</div>
+          <div class="metric-val">$96.2B</div>
+          <div class="metric-chg up">▲ +13% YoY</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="wz-chart">
+        <div class="chart-head">
+          <span class="chart-title">Revenue vs Services · FY22–FY24 ($B)</span>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-line" style="background:var(--l1)"></div>Total
+            </div>
+            <div class="legend-item">
+              <div class="legend-line" style="background:var(--l2)"></div>Services
+            </div>
+          </div>
+        </div>
+        <svg viewBox="0 0 540 118" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+          <line x1="56" y1="8"   x2="524" y2="8"   stroke="#222226" stroke-width="1"/>
+          <line x1="56" y1="38"  x2="524" y2="38"  stroke="#222226" stroke-width="1"/>
+          <line x1="56" y1="68"  x2="524" y2="68"  stroke="#222226" stroke-width="1"/>
+          <line x1="56" y1="98"  x2="524" y2="98"  stroke="#222226" stroke-width="1"/>
+          <text x="50" y="12"  text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#4c4c52">430</text>
+          <text x="50" y="42"  text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#4c4c52">400</text>
+          <text x="50" y="72"  text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#4c4c52">370</text>
+          <text x="50" y="102" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#4c4c52">340</text>
+          <text x="155" y="113" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4c4c52">FY22</text>
+          <text x="290" y="113" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4c4c52">FY23</text>
+          <text x="425" y="113" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4c4c52">FY24</text>
+          <!-- Total Revenue: $394B y=38.5  $383B y=49.6  $391B y=42.2 -->
+          <polyline points="155,38.5 290,49.6 425,42.2"
+            fill="none" stroke="#c0c0c0" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="155" cy="38.5" r="2.5" fill="#1c1c1f" stroke="#c0c0c0" stroke-width="1.5"/>
+          <circle cx="290" cy="49.6" r="2.5" fill="#1c1c1f" stroke="#c0c0c0" stroke-width="1.5"/>
+          <circle cx="425" cy="42.2" r="2.5" fill="#1c1c1f" stroke="#c0c0c0" stroke-width="1.5"/>
+          <text x="155" y="31"  text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#888">$394B</text>
+          <text x="290" y="43"  text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#888">$383B</text>
+          <text x="425" y="35"  text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#888">$391B</text>
+          <!-- Services: $78B y=98  $85B y=85.2  $96B y=66 -->
+          <polyline points="155,98 290,85.2 425,66"
+            fill="none" stroke="#484850" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="4,2.5"/>
+          <circle cx="155" cy="98"   r="2.5" fill="#1c1c1f" stroke="#484850" stroke-width="1.5"/>
+          <circle cx="290" cy="85.2" r="2.5" fill="#1c1c1f" stroke="#484850" stroke-width="1.5"/>
+          <circle cx="425" cy="66"   r="2.5" fill="#1c1c1f" stroke="#484850" stroke-width="1.5"/>
+          <text x="155" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#4c4c52">$78B</text>
+          <text x="290" y="79"  text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#4c4c52">$85B</text>
+          <text x="425" y="59"  text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#4c4c52">$96B</text>
+        </svg>
+      </div>
+
+      <!-- Analysis -->
+      <div class="wz-analysis">
+        Revenue contracted to <strong>$391.0B</strong> <span class="cite">10-K §8.1</span>,
+        driven by an iPhone cycle pause. Services crossed <strong>$96.2B</strong>, now
+        <strong>24.6%</strong> of revenue vs. 18% in FY2020 <span class="cite">10-K §7.1</span>.
+        Services gross margin reached <strong>74.0%</strong> — nearly double hardware's 37.2%
+        <span class="cite">10-K §8.3</span>. FCF conversion of 28.3% supports ongoing buybacks.
+      </div>
+
+      <!-- Sources — click any to open the original filing section -->
+      <div class="wz-sources">
+        <div class="sources-label">4 sources cited this step</div>
+        <div class="sources-chips">
+          <span class="src-chip">10-K §8.1 · Revenue</span>
+          <span class="src-chip">10-K §8.2 · Operating Income</span>
+          <span class="src-chip">10-K §7.1 · Services Mix</span>
+          <span class="src-chip">10-K §8.3 · Gross Margin</span>
+        </div>
+      </div>
+
+      <!-- Follow-up — ask Claude about this step -->
+      <div class="wz-followup">
+        <input class="followup-input" type="text" placeholder="Ask a follow-up about this step…">
+        <button class="followup-btn">↵</button>
+      </div>
+    </div>
+
+    <div class="wz-foot">
+      <div class="wz-foot-meta">Step 3 of 9 · Est. remaining $0.24</div>
+      <div class="wz-btns">
+        <button class="btn btn-ghost">← Previous</button>
+        <button class="btn btn-primary" onclick="showScreen('memo')">Continue: Moat Analysis →</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN 3 · MEMO OUTPUT
+     Consumer job: Make a decision. What should I do with this stock?
+══════════════════════════════════ -->
+<div class="screen screen-memo">
+  <div class="memo-top">
+    <div>
+      <div class="memo-co">
+        <h1>Apple Inc.</h1>
+        <span class="memo-ticker">AAPL</span>
+        <span class="memo-sub">NASDAQ · Technology</span>
+      </div>
+      <div class="memo-date">March 12, 2026 · 74 citations · 9/9 steps complete</div>
+    </div>
+    <div class="memo-actions">
+      <button class="btn-export">↓ Export PDF</button>
+    </div>
+  </div>
+
+  <div class="memo-body">
+    <!-- Verdict Hero — the decision summary, first thing they see -->
+    <div class="verdict-hero">
+      <div class="vh-verdict-col">
+        <div class="vh-verdict-badge">★ WATCH</div>
+        <div class="vh-stars">★★★☆☆</div>
+        <div class="vh-conviction">3 / 5</div>
+      </div>
+
+      <div class="vh-thesis">
+        <p>Services growth is compelling but current valuation prices in execution perfection.
+           Revenue contraction masks a structurally improving business.
+           Wait for an entry below $195 or for a re-acceleration in device sales.</p>
+        <div class="vh-bullets">
+          <div class="vh-bullet pos"><span>✓</span><span class="vh-btext">Services mix improving: 24.6% → est. 30%+ by FY2027</span></div>
+          <div class="vh-bullet pos"><span>✓</span><span class="vh-btext">FCF generation exceptional at $110.5B (28.3% margin)</span></div>
+          <div class="vh-bullet neg"><span>✗</span><span class="vh-btext">28× NTM P/E vs. 5-yr avg of 22× — limited margin of safety</span></div>
+        </div>
+      </div>
+
+      <div class="vh-price-col">
+        <div class="vh-price-row">
+          <div class="vh-price-label">Fair Value</div>
+          <div class="vh-price-val">$168–$192</div>
+        </div>
+        <div class="vh-price-row">
+          <div class="vh-price-label">Current</div>
+          <div class="vh-price-val">~$215</div>
+        </div>
+        <div class="vh-price-row">
+          <div class="vh-price-label">Premium</div>
+          <div class="vh-price-val dn">12–22%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Research sections — collapsed by default, expand what you care about -->
+    <div class="memo-sections">
+
+      <div class="memo-sec" onclick="toggleSec(this)">
+        <div class="memo-sec-head">
+          <span class="sec-num">01</span>
+          <span class="sec-title">Business Overview</span>
+          <span class="sec-cites">8 citations</span>
+          <span class="sec-toggle">+</span>
+        </div>
+        <div class="memo-sec-body">
+          <p>Apple designs and markets <strong>smartphones (iPhone), computers (Mac), tablets (iPad),
+          wearables, and services</strong> <span class="cite">10-K §1</span>. Sold across 175 countries
+          through retail, online, and carrier channels <span class="cite">10-K §1.2</span>. The Services
+          segment — App Store, Music, iCloud, TV+, Pay, Care — grew from 18% of revenue in FY2020 to
+          <strong>24.6%</strong> in FY2024 <span class="cite">10-K §7.1</span>.</p>
+        </div>
+      </div>
+
+      <div class="memo-sec open" onclick="toggleSec(this)">
+        <div class="memo-sec-head">
+          <span class="sec-num">03</span>
+          <span class="sec-title">Financial Deep Dive</span>
+          <span class="sec-cites">18 citations</span>
+          <span class="sec-toggle">−</span>
+        </div>
+        <div class="memo-sec-body">
+          <p>Revenue declined 2% to <strong>$391.0B</strong> <span class="cite">10-K §8.1</span>.
+          Operating margin expanded 80bps to <strong>31.5%</strong> <span class="cite">10-K §8.2</span>.
+          FCF of <strong>$110.5B</strong> (28.3% margin) funds ongoing buybacks. Services gross margin
+          reached <strong>74.0%</strong> vs. hardware 37.2% <span class="cite">10-K §8.3</span>.</p>
+        </div>
+      </div>
+
+      <div class="memo-sec" onclick="toggleSec(this)">
+        <div class="memo-sec-head">
+          <span class="sec-num">04</span>
+          <span class="sec-title">Moat Analysis</span>
+          <span class="sec-cites">11 citations</span>
+          <span class="sec-toggle">+</span>
+        </div>
+        <div class="memo-sec-body">
+          <p>Network effects across 2B+ active devices create a durable switching moat. App Store
+          generated $1.1T in developer billings, compounding platform lock-in
+          <span class="cite">10-K §3.2</span>. Brand premium sustains iPhone ASPs above $900 globally
+          despite Android competition at lower price points.</p>
+        </div>
+      </div>
+
+      <div class="memo-sec" onclick="toggleSec(this)">
+        <div class="memo-sec-head">
+          <span class="sec-num">06</span>
+          <span class="sec-title">Valuation</span>
+          <span class="sec-cites">6 citations</span>
+          <span class="sec-toggle">+</span>
+        </div>
+        <div class="memo-sec-body">
+          <p>Trades at <strong>28×</strong> NTM earnings vs. 5-yr avg of 22× — pricing in the
+          Services mix-shift premium. DCF at 9% WACC implies fair value of <strong>$168–$192</strong>.
+          Current price ~$215 represents a <strong>12–22% premium</strong> to intrinsic value.</p>
+        </div>
+      </div>
+
+      <!-- Bear Case — always open, consumer must see risks -->
+      <div class="memo-sec bear-sec">
+        <div class="memo-sec-head" style="cursor:default">
+          <span class="sec-num">07</span>
+          <span class="sec-title bear">Bear Case</span>
+          <span class="sec-cites">9 citations</span>
+        </div>
+        <div class="memo-sec-body">
+          <div class="bear-block">
+            China revenue at <strong>$66.9B</strong> (17% of total) faces regulatory headwinds and
+            rising Huawei competition post-ban circumvention <span class="cite">10-K §1.4</span>.
+            DOJ antitrust case targeting the App Store 30% commission could impair the
+            highest-margin segment. Vision Pro adoption remains negligible with no clear path to volume.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Your Notes — consumer records own thesis before deciding -->
+    <div class="memo-notes">
+      <div class="notes-label">Your Notes</div>
+      <textarea class="notes-area" placeholder="Add your own thesis, price target, or reminder before deciding…"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- Proto nav -->
+<nav class="proto-nav">
+  <button onclick="showScreen('onboarding')" id="nav-onboarding">1 · Onboarding</button>
+  <button onclick="showScreen('wizard')"     id="nav-wizard">2 · Research Wizard</button>
+  <button onclick="showScreen('memo')"       id="nav-memo">3 · Memo Output</button>
+</nav>
+
+<script>
+  function showScreen(name) {
+    document.documentElement.setAttribute('data-screen', name);
+    document.querySelectorAll('.proto-nav button').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('nav-' + name);
+    if (btn) btn.classList.add('active');
+  }
+
+  function goStep2() {
+    document.getElementById('ob-step-1').classList.add('hidden');
+    document.getElementById('ob-step-2').classList.remove('hidden');
+    document.getElementById('ob-tab-1').classList.remove('active');
+    document.getElementById('ob-tab-2').classList.add('active');
+    document.getElementById('tab-num-2').style.background = 'var(--t1)';
+    document.getElementById('tab-num-2').style.color = 'var(--bg)';
+    document.getElementById('ticker-input').focus();
+  }
+
+  function selDepth(val) {
+    document.querySelectorAll('.depth-opt').forEach(el => el.classList.remove('sel'));
+    document.getElementById('depth-' + val).classList.add('sel');
+  }
+
+  function toggleSec(el) {
+    const isOpen = el.classList.contains('open');
+    el.classList.toggle('open', !isOpen);
+    const toggle = el.querySelector('.sec-toggle');
+    if (toggle) toggle.textContent = isOpen ? '+' : '−';
+  }
+
+  showScreen('onboarding');
+</script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+/*  ═══════════════════════════════════════════════════════════════════════
+ *  CLAUDE BULL — Design Tokens
+ *  3-tier system: Primitives → Semantic → Component
+ *
+ *  Usage: import in globals.css  →  @import './tokens.css';
+ *  All values live in :root (dark-first, single theme).
+ *  ═══════════════════════════════════════════════════════════════════════ */
+
+@layer tokens {
+  :root {
+
+    /* ───────────────────────────────────────────────────────────────────
+     * TIER 1 — PRIMITIVES
+     * Raw scales. Never reference these directly in components;
+     * always go through a semantic or component token.
+     * ─────────────────────────────────────────────────────────────────── */
+
+    /* ·· Gray palette ·················································· */
+    --gray-950:  #0c0c0e;
+    --gray-900:  #141416;
+    --gray-850:  #1c1c1f;
+    --gray-800:  #242428;
+    --gray-750:  #2a2a2e;
+    --gray-700:  #3a3a40;
+    --gray-600:  #4c4c52;
+    --gray-400:  #888888;
+    --gray-100:  #ebebeb;
+
+    /* ·· Accent palette ················································ */
+    --green-500:   hsl(142, 38%, 46%);
+    --green-500-8: hsla(142, 38%, 46%, 0.08);
+    --green-500-7: hsla(142, 38%, 46%, 0.07);
+    --green-500-22: hsla(142, 38%, 46%, 0.22);
+    --green-500-25: hsla(142, 38%, 46%, 0.25);
+    --green-600:   hsl(142, 38%, 38%);
+
+    --red-500:     hsl(2, 48%, 48%);
+    --red-500-6:   hsla(2, 48%, 48%, 0.06);
+    --red-500-7:   hsla(2, 48%, 48%, 0.07);
+    --red-500-22:  hsla(2, 48%, 48%, 0.22);
+    --red-500-25:  hsla(2, 48%, 48%, 0.25);
+
+    --blue-500:    hsl(210, 60%, 55%);
+    --blue-500-8:  hsla(210, 60%, 55%, 0.08);
+    --blue-500-25: hsla(210, 60%, 55%, 0.25);
+
+    --amber-500:   hsl(38, 75%, 52%);
+    --amber-500-8: hsla(38, 75%, 52%, 0.08);
+    --amber-500-25: hsla(38, 75%, 52%, 0.25);
+
+    --purple-500:  hsl(270, 50%, 62%);
+    --purple-500-8: hsla(270, 50%, 62%, 0.08);
+    --purple-500-25: hsla(270, 50%, 62%, 0.25);
+
+    --cyan-500:    hsl(190, 55%, 48%);
+    --cyan-500-8:  hsla(190, 55%, 48%, 0.08);
+    --cyan-500-25: hsla(190, 55%, 48%, 0.25);
+
+    /* ·· Chart palette (OKLCh) ········································ */
+    --chart-blue-1: oklch(0.809 0.105 251.813);
+    --chart-blue-2: oklch(0.623 0.214 259.815);
+    --chart-blue-3: oklch(0.546 0.245 262.881);
+    --chart-blue-4: oklch(0.488 0.243 264.376);
+    --chart-blue-5: oklch(0.424 0.199 265.638);
+
+    /* ·· Typography scale ·············································· */
+    --font-family-sans:  var(--font-inter);
+    --font-family-mono:  var(--font-mono);
+
+    --text-3xs:  9px;
+    --text-2xs:  10px;
+    --text-xs:   11px;
+    --text-sm:   12px;
+    --text-base: 13px;
+    --text-md:   14px;
+    --text-lg:   15px;
+    --text-xl:   16px;
+    --text-2xl:  18px;
+    --text-3xl:  22px;
+    --text-4xl:  26px;
+    --text-5xl:  36px;
+
+    --weight-normal:   400;
+    --weight-medium:   500;
+    --weight-semibold: 600;
+    --weight-bold:     700;
+
+    --leading-none:    1;
+    --leading-tight:   1.3;
+    --leading-snug:    1.5;
+    --leading-normal:  1.55;
+    --leading-relaxed: 1.65;
+    --leading-loose:   1.75;
+    --leading-looser:  1.8;
+
+    --tracking-tighter: -0.4px;
+    --tracking-tight:   -0.02em;
+    --tracking-normal:  0;
+    --tracking-wide:    0.04em;
+    --tracking-wider:   0.06em;
+    --tracking-widest:  0.08em;
+    --tracking-ultra:   0.1em;
+
+    /* ·· Spacing scale ················································· */
+    --space-0:   0;
+    --space-0-5: 2px;
+    --space-1:   3px;
+    --space-1-5: 4px;
+    --space-2:   5px;
+    --space-2-5: 6px;
+    --space-3:   7px;
+    --space-3-5: 8px;
+    --space-4:   9px;
+    --space-5:   10px;
+    --space-6:   12px;
+    --space-7:   14px;
+    --space-8:   16px;
+    --space-9:   18px;
+    --space-10:  20px;
+    --space-11:  22px;
+    --space-12:  24px;
+    --space-14:  28px;
+    --space-16:  32px;
+    --space-20:  40px;
+    --space-24:  48px;
+    --space-32:  80px;
+
+    /* ·· Radius scale ·················································· */
+    --radius-xs:   2px;
+    --radius-sm:   3px;
+    --radius-md:   4px;
+    --radius-base: 6px;
+    --radius-lg:   8px;
+    --radius-xl:   10px;
+    --radius-full: 50%;
+
+    /* ·· Shadow scale ·················································· */
+    --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow-md:  0 2px 6px rgba(0, 0, 0, 0.35);
+    --shadow-lg:  0 4px 12px rgba(0, 0, 0, 0.45);
+
+    /* ·· Motion ························································ */
+    --duration-fast:   0.1s;
+    --duration-normal: 0.15s;
+    --duration-slow:   0.3s;
+    --duration-slower: 0.4s;
+    --ease-default:    ease;
+    --ease-out:        ease-out;
+    --ease-in-out:     ease-in-out;
+
+    /* ·· Widths ························································ */
+    --width-sidebar: 188px;
+    --width-setup:   420px;
+    --width-memo:    820px;
+
+
+    /* ───────────────────────────────────────────────────────────────────
+     * TIER 2 — SEMANTIC TOKENS
+     * Purpose-mapped references to primitives.
+     * Use these in layouts and general styling.
+     * ─────────────────────────────────────────────────────────────────── */
+
+    /* ·· Surfaces ······················································ */
+    --surface-base:      var(--gray-950);   /* page background            */
+    --surface-raised:    var(--gray-900);   /* sidebar, top bar, cards    */
+    --surface-overlay:   var(--gray-850);   /* input bg, secondary cards  */
+    --surface-hover:     var(--gray-800);   /* hover / selected state     */
+
+    /* ·· Borders ······················································· */
+    --border-default:    var(--gray-750);   /* dividers, card borders     */
+    --border-strong:     var(--gray-700);   /* focus rings, emphasis      */
+
+    /* ·· Text ·························································· */
+    --text-primary:      var(--gray-100);   /* headings, body             */
+    --text-secondary:    var(--gray-400);   /* descriptions, muted        */
+    --text-tertiary:     var(--gray-600);   /* disabled, subtle labels    */
+
+    /* ·· Sentiment ····················································· */
+    --color-bullish:     var(--green-500);
+    --color-bullish-bg:  var(--green-500-8);
+    --color-bullish-muted-bg: var(--green-500-7);
+    --color-bullish-border:   var(--green-500-22);
+    --color-bullish-link:     var(--green-600);
+
+    --color-bearish:     var(--red-500);
+    --color-bearish-bg:  var(--red-500-6);
+    --color-bearish-muted-bg: var(--red-500-7);
+    --color-bearish-border:   var(--red-500-22);
+
+    --color-neutral:     var(--gray-600);   /* NEUTRAL / HOLD verdict     */
+
+    /* ·· Filing source accents ········································· */
+    --accent-xbrl:           var(--green-500);
+    --accent-xbrl-bg:        var(--green-500-8);
+    --accent-xbrl-border:    var(--green-500-25);
+
+    --accent-13f:            var(--blue-500);
+    --accent-13f-bg:         var(--blue-500-8);
+    --accent-13f-border:     var(--blue-500-25);
+
+    --accent-proxy:          var(--amber-500);
+    --accent-proxy-bg:       var(--amber-500-8);
+    --accent-proxy-border:   var(--amber-500-25);
+
+    --accent-quote:          var(--purple-500);
+    --accent-quote-bg:       var(--purple-500-8);
+    --accent-quote-border:   var(--purple-500-25);
+
+    --accent-8k:             var(--cyan-500);
+    --accent-8k-bg:          var(--cyan-500-8);
+    --accent-8k-border:      var(--cyan-500-25);
+
+    /* ·· Charts ························································ */
+    --chart-1: var(--chart-blue-1);
+    --chart-2: var(--chart-blue-2);
+    --chart-3: var(--chart-blue-3);
+    --chart-4: var(--chart-blue-4);
+    --chart-5: var(--chart-blue-5);
+
+
+    /* ───────────────────────────────────────────────────────────────────
+     * TIER 3 — COMPONENT TOKENS
+     * Scoped to specific UI patterns. These keep component files
+     * free of visual decisions.
+     * ─────────────────────────────────────────────────────────────────── */
+
+    /* ·· Button — Primary ·············································· */
+    --btn-primary-bg:       var(--text-primary);
+    --btn-primary-fg:       var(--surface-base);
+    --btn-primary-radius:   var(--radius-base);
+    --btn-primary-font-size: var(--text-base);
+    --btn-primary-weight:   var(--weight-medium);
+    --btn-primary-padding:  var(--space-5) var(--space-12);
+
+    /* ·· Button — Ghost ················································ */
+    --btn-ghost-bg:         transparent;
+    --btn-ghost-fg:         var(--text-secondary);
+    --btn-ghost-border:     var(--border-default);
+    --btn-ghost-radius:     var(--radius-base);
+    --btn-ghost-font-size:  var(--text-base);
+    --btn-ghost-padding:    var(--space-3) var(--space-7);
+
+    /* ·· Input ························································· */
+    --input-bg:             var(--surface-overlay);
+    --input-border:         var(--border-default);
+    --input-border-focus:   var(--border-strong);
+    --input-fg:             var(--text-primary);
+    --input-placeholder:    var(--text-tertiary);
+    --input-radius:         var(--radius-base);
+    --input-padding:        var(--space-5) var(--space-6);
+    --input-font-size:      var(--text-base);
+    --input-font-family:    var(--font-family-mono);
+    --input-transition:     border-color var(--duration-normal);
+
+    /* ·· Card ·························································· */
+    --card-bg:              var(--surface-raised);
+    --card-border:          var(--border-default);
+    --card-radius:          var(--radius-xl);
+    --card-padding:         var(--space-10) var(--space-16);
+
+    /* ·· Metric chip ··················································· */
+    --chip-bg:              var(--surface-overlay);
+    --chip-border:          var(--border-default);
+    --chip-radius:          var(--radius-base);
+    --chip-padding:         var(--space-3-5) var(--space-6);
+
+    /* ·· Tag / badge ··················································· */
+    --tag-bg:               var(--surface-overlay);
+    --tag-border:           var(--border-default);
+    --tag-radius:           var(--radius-md);
+    --tag-padding:          var(--space-1) var(--space-3-5);
+    --tag-font-size:        var(--text-xs);
+    --tag-font-family:      var(--font-family-mono);
+
+    /* ·· Label (uppercase micro) ······································· */
+    --label-font-size:      var(--text-2xs);
+    --label-weight:         var(--weight-medium);
+    --label-tracking:       var(--tracking-widest);
+    --label-color:          var(--text-tertiary);
+    --label-transform:      uppercase;
+
+    /* ·· Sidebar ······················································· */
+    --sidebar-bg:           var(--surface-raised);
+    --sidebar-border:       var(--border-default);
+    --sidebar-width:        var(--width-sidebar);
+    --sidebar-item-padding: var(--space-3) var(--space-8);
+    --sidebar-item-active-bg:  var(--surface-overlay);
+    --sidebar-item-active-indicator: var(--text-primary);
+
+    /* ·· Step indicator (sidebar numbers) ······························ */
+    --step-size:            18px;
+    --step-radius:          var(--radius-full);
+    --step-font-size:       var(--text-3xs);
+    --step-font-family:     var(--font-family-mono);
+    --step-border-default:  var(--border-default);
+    --step-border-active:   var(--text-primary);
+    --step-border-done:     var(--border-strong);
+    --step-bg-active:       var(--text-primary);
+    --step-bg-done:         var(--surface-hover);
+    --step-fg-active:       var(--surface-base);
+    --step-fg-done:         var(--text-secondary);
+    --step-fg-default:      var(--text-tertiary);
+
+    /* ·· Progress bar ·················································· */
+    --progress-height:      2px;
+    --progress-bg:          var(--border-default);
+    --progress-fill:        var(--text-tertiary);
+    --progress-radius:      1px;
+
+    /* ·· Data point row ················································ */
+    --datapoint-radius:     5px;
+    --datapoint-padding:    var(--space-3-5) var(--space-5);
+    --datapoint-gap:        var(--space-5);
+    --datapoint-border-width: 2px;
+    --datapoint-up-bg:      var(--color-bullish-bg);
+    --datapoint-up-border:  var(--color-bullish);
+    --datapoint-down-bg:    var(--color-bearish-bg);
+    --datapoint-down-border: var(--color-bearish);
+    --datapoint-neutral-bg: var(--surface-overlay);
+    --datapoint-neutral-border: var(--border-default);
+
+    /* ·· Finding card ·················································· */
+    --finding-bg:           var(--surface-overlay);
+    --finding-border:       var(--border-strong);
+    --finding-radius:       var(--radius-base);
+    --finding-padding:      var(--space-7) var(--space-8);
+    --finding-indicator-width: 3px;
+
+    /* ·· Verdict hero (memo) ··········································· */
+    --verdict-radius:       var(--radius-xl);
+    --verdict-padding:      var(--space-14) var(--space-16);
+    --verdict-font-size:    var(--text-5xl);
+    --verdict-font-weight:  var(--weight-bold);
+
+    /* ·· Bar chart ····················································· */
+    --bar-height:           18px;
+    --bar-bg:               var(--surface-hover);
+    --bar-fill:             var(--text-tertiary);
+    --bar-radius:           var(--radius-xs);
+
+    /* ·· Gauge (valuation) ············································· */
+    --gauge-height:         8px;
+    --gauge-bg:             var(--surface-hover);
+    --gauge-fill:           var(--text-tertiary);
+    --gauge-fill-opacity:   0.6;
+    --gauge-radius:         var(--radius-md);
+
+    /* ·· Accordion (memo sections) ····································· */
+    --accordion-border:     var(--border-default);
+    --accordion-padding:    var(--space-8) var(--space-1-5);
+    --accordion-icon-color: var(--text-tertiary);
+    --accordion-icon-size:  var(--text-md);
+
+    /* ·· Status indicator dot ·········································· */
+    --dot-size:             5px;
+    --dot-radius:           var(--radius-full);
+  }
+}

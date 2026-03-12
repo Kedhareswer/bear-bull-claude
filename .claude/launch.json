@@ -1,0 +1,20 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Claude Bull Prototype",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["serve.py"],
+      "port": 3333,
+      "autoPort": true
+    },
+    {
+      "name": "Claude Bull App",
+      "runtimeExecutable": "C:/Program Files/nodejs/node.exe",
+      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "--port", "3000"],
+      "cwd": "app",
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}
