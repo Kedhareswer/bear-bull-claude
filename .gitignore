@@ -40,4 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.claude
+# Tool/IDE directories
+.superpowers/
+.playwright-mcp/
+.claude/
