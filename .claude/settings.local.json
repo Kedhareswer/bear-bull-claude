@@ -58,7 +58,12 @@
       "mcp__plugin_playwright_playwright__browser_navigate",
       "mcp__plugin_playwright_playwright__browser_take_screenshot",
       "Skill(design-studio:brand-kit)",
-      "Skill(design-studio:brand-kit:*)"
+      "Skill(design-studio:brand-kit:*)",
+      "Bash(ls -la /c/Users/mbkhn/Downloads/Inspired/claude-bull/app/.env*)",
+      "Bash(git mv:*)",
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull add next-env.d.ts .env.example)",
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull status --short)",
+      "Bash(git -C /c/Users/mbkhn/Downloads/Inspired/claude-bull commit -m \"chore: move Next.js config files to repo root\")"
     ]
   }
 }
